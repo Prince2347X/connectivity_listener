@@ -1,14 +1,14 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:connectivity_listener/connectivity_listener_method_channel.dart';
-import 'package:connectivity_listener/connectivity_listener_platform_interface.dart';
+import 'package:network_settings_listener/network_settings_listener_method_channel.dart';
+import 'package:network_settings_listener/network_settings_listener_platform_interface.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  MethodChannelConnectivityListener platform = MethodChannelConnectivityListener();
-  const String wifiChannelName = 'connectivity_listener/wifi_state';
-  const String bluetoothChannelName = 'connectivity_listener/bluetooth_state';
+  MethodChannelNetworkSettingsListener platform = MethodChannelNetworkSettingsListener();
+  const String wifiChannelName = 'network_settings_listener/wifi_state';
+  const String bluetoothChannelName = 'network_settings_listener/bluetooth_state';
 
   // Helper to encode messages for event channels
   ByteData? encodeEvent(dynamic event) {

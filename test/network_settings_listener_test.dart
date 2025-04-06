@@ -1,17 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:connectivity_listener/connectivity_listener.dart';
-import 'package:connectivity_listener/connectivity_listener_platform_interface.dart';
-import 'package:connectivity_listener/connectivity_listener_method_channel.dart';
+import 'package:network_settings_listener/network_settings_listener.dart';
+import 'package:network_settings_listener/network_settings_listener_platform_interface.dart';
+import 'package:network_settings_listener/network_settings_listener_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-class MockConnectivityListenerPlatform
+class MockNetworkSettingsListenerPlatform
     with MockPlatformInterfaceMixin
-    implements ConnectivityListenerPlatform {
-  // Remove unused state tracking fields
-  // We don't need them since we're using Stream.fromIterable
-
+    implements NetworkSettingsListenerPlatform {
   @override
   Stream<StateChange<WifiState>> get onWifiStateChanged {
     return Stream.fromIterable([
@@ -32,16 +29,16 @@ class MockConnectivityListenerPlatform
 }
 
 void main() {
-  final ConnectivityListenerPlatform initialPlatform = ConnectivityListenerPlatform.instance;
+  final NetworkSettingsListenerPlatform initialPlatform = NetworkSettingsListenerPlatform.instance;
 
-  test('$MethodChannelConnectivityListener is the default instance', () {
-    expect(initialPlatform, isInstanceOf<MethodChannelConnectivityListener>());
+  test('$MethodChannelNetworkSettingsListener is the default instance', () {
+    expect(initialPlatform, isInstanceOf<MethodChannelNetworkSettingsListener>());
   });
 
   test('onWifiStateChanged emits state changes in correct order', () async {
-    final plugin = ConnectivityListener();
-    final fakePlatform = MockConnectivityListenerPlatform();
-    ConnectivityListenerPlatform.instance = fakePlatform;
+    final plugin = NetworkSettingsListener();
+    final fakePlatform = MockNetworkSettingsListenerPlatform();
+    NetworkSettingsListenerPlatform.instance = fakePlatform;
 
     expect(
       plugin.onWifiStateChanged,
@@ -62,9 +59,9 @@ void main() {
   });
 
   test('onBluetoothStateChanged emits state changes in correct order', () async {
-    final plugin = ConnectivityListener();
-    final fakePlatform = MockConnectivityListenerPlatform();
-    ConnectivityListenerPlatform.instance = fakePlatform;
+    final plugin = NetworkSettingsListener();
+    final fakePlatform = MockNetworkSettingsListenerPlatform();
+    NetworkSettingsListenerPlatform.instance = fakePlatform;
 
     expect(
       plugin.onBluetoothStateChanged,

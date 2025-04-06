@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'connectivity_listener_method_channel.dart';
+import 'network_settings_listener_method_channel.dart';
 
 /// Represents all possible WiFi states as defined in Android's WifiManager
 enum WifiState {
@@ -46,23 +46,23 @@ class StateChange<T extends Enum> {
   String toString() => 'StateChange(previous: ${previousState?.name}, current: ${currentState.name})';
 }
 
-abstract class ConnectivityListenerPlatform extends PlatformInterface {
-  /// Constructs a ConnectivityListenerPlatform.
-  ConnectivityListenerPlatform() : super(token: _token);
+abstract class NetworkSettingsListenerPlatform extends PlatformInterface {
+  /// Constructs a NetworkSettingsListenerPlatform.
+  NetworkSettingsListenerPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
-  static ConnectivityListenerPlatform _instance = MethodChannelConnectivityListener();
+  static NetworkSettingsListenerPlatform _instance = MethodChannelNetworkSettingsListener();
 
-  /// The default instance of [ConnectivityListenerPlatform] to use.
+  /// The default instance of [NetworkSettingsListenerPlatform] to use.
   ///
-  /// Defaults to [MethodChannelConnectivityListener].
-  static ConnectivityListenerPlatform get instance => _instance;
+  /// Defaults to [MethodChannelNetworkSettingsListener].
+  static NetworkSettingsListenerPlatform get instance => _instance;
 
   /// Platform-specific implementations should set this with their own
-  /// platform-specific class that extends [ConnectivityListenerPlatform] when
+  /// platform-specific class that extends [NetworkSettingsListenerPlatform] when
   /// they register themselves.
-  static set instance(ConnectivityListenerPlatform instance) {
+  static set instance(NetworkSettingsListenerPlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }

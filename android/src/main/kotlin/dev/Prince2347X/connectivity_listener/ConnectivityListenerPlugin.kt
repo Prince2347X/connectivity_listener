@@ -1,4 +1,4 @@
-package dev.Prince2347X.connectivity_listener
+package dev.Prince2347X.network_settings_listener
 
 import android.content.Context
 import android.content.Intent
@@ -19,8 +19,8 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-/** ConnectivityListenerPlugin */
-class ConnectivityListenerPlugin: FlutterPlugin, MethodCallHandler {
+/** NetworkSettingsListenerPlugin */
+class NetworkSettingsListenerPlugin: FlutterPlugin, MethodCallHandler {
     private lateinit var methodChannel: MethodChannel
     private lateinit var wifiEventChannel: EventChannel
     private lateinit var bluetoothEventChannel: EventChannel
@@ -40,9 +40,9 @@ class ConnectivityListenerPlugin: FlutterPlugin, MethodCallHandler {
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         applicationContext = flutterPluginBinding.applicationContext
-        methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "connectivity_listener/method")
-        wifiEventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "connectivity_listener/wifi_state")
-        bluetoothEventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "connectivity_listener/bluetooth_state")
+        methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "network_settings_listener/method")
+        wifiEventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "network_settings_listener/wifi_state")
+        bluetoothEventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "network_settings_listener/bluetooth_state")
 
         methodChannel.setMethodCallHandler(this)
 

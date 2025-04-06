@@ -3,21 +3,21 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import 'connectivity_listener_platform_interface.dart';
+import 'network_settings_listener_platform_interface.dart';
 
-/// An implementation of [ConnectivityListenerPlatform] that uses method channels.
-class MethodChannelConnectivityListener extends ConnectivityListenerPlatform {
+/// An implementation of [NetworkSettingsListenerPlatform] that uses method channels.
+class MethodChannelNetworkSettingsListener extends NetworkSettingsListenerPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('connectivity_listener/method');
+  final methodChannel = const MethodChannel('network_settings_listener/method');
 
   /// Event channel for WiFi state changes.
   @visibleForTesting
-  final wifiEventChannel = const EventChannel('connectivity_listener/wifi_state');
+  final wifiEventChannel = const EventChannel('network_settings_listener/wifi_state');
 
   /// Event channel for Bluetooth state changes.
   @visibleForTesting
-  final bluetoothEventChannel = const EventChannel('connectivity_listener/bluetooth_state');
+  final bluetoothEventChannel = const EventChannel('network_settings_listener/bluetooth_state');
 
   Stream<StateChange<WifiState>>? _onWifiStateChanged;
   Stream<StateChange<BluetoothState>>? _onBluetoothStateChanged;

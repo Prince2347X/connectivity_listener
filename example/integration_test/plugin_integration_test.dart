@@ -1,14 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'package:connectivity_listener/connectivity_listener.dart';
-import 'package:connectivity_listener/connectivity_listener_platform_interface.dart';
+import 'package:network_settings_listener/network_settings_listener.dart';
+import 'package:network_settings_listener/network_settings_listener_platform_interface.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('State change streams are accessible and include previous states', (WidgetTester tester) async {
-    final ConnectivityListener plugin = ConnectivityListener();
+    final NetworkSettingsListener plugin = NetworkSettingsListener();
     
     // For tracking state changes
     StateChange<WifiState>? lastWifiStateChange;

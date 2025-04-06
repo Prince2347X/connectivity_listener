@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="dev.Prince2347X.connectivity_listener">
+  package="dev.Prince2347X.network_settings_listener">
 
     <!-- Required for checking WiFi state -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />

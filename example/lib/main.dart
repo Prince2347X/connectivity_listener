@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:connectivity_listener/connectivity_listener.dart';
-import 'package:connectivity_listener/connectivity_listener_platform_interface.dart';
+import 'package:network_settings_listener/network_settings_listener.dart';
+import 'package:network_settings_listener/network_settings_listener_platform_interface.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +19,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   StateChange<WifiState>? _wifiStateChange;
   StateChange<BluetoothState>? _bluetoothStateChange;
-  final _connectivityListenerPlugin = ConnectivityListener();
+  final _networkSettingsListener = NetworkSettingsListener();
   late StreamSubscription<StateChange<WifiState>> _wifiSubscription;
   late StreamSubscription<StateChange<BluetoothState>> _bluetoothSubscription;
 
@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     // Listen to WiFi state changes
-    _wifiSubscription = _connectivityListenerPlugin.onWifiStateChanged.listen(
+    _wifiSubscription = _networkSettingsListener.onWifiStateChanged.listen(
       (StateChange<WifiState> stateChange) {
         if (!mounted) return;
         setState(() {
@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
     );
 
     // Listen to Bluetooth state changes
-    _bluetoothSubscription = _connectivityListenerPlugin.onBluetoothStateChanged.listen(
+    _bluetoothSubscription = _networkSettingsListener.onBluetoothStateChanged.listen(
       (StateChange<BluetoothState> stateChange) {
         if (!mounted) return;
         setState(() {

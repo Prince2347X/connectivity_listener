@@ -1,5 +1,5 @@
-group = "dev.Prince2347X.connectivity_listener"
-version = "1.0-SNAPSHOT"
+group = "dev.Prince2347X.network_settings_listener"
+version = "1.0"
 
 buildscript {
     ext.kotlin_version = "1.8.22"

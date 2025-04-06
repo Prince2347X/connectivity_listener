@@ -1,7 +1,7 @@
-name: connectivity_listener
+name: network_settings_listener
 description: "A Flutter plugin for Android to listen for WiFi and Bluetooth connectivity state changes."
-version: 1.0.0
-homepage: https://github.com/Prince2347X/connectivity_listener
+version: 0.1.0
+homepage: https://github.com/Prince2347X/network_settings_listener
 
 environment:
   sdk: ^3.6.1
@@ -35,9 +35,8 @@ flutter:
   plugin:
     platforms:
       android:
-        package: dev.Prince2347X.connectivity_listener
-        pluginClass: ConnectivityListenerPlugin
-        # No FFI plugin needed for this approach
+        package: dev.Prince2347X.network_settings_listener
+        pluginClass: NetworkSettingsListenerPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
