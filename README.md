@@ -6,12 +6,26 @@ A Flutter plugin for Android to listen for WiFi and Bluetooth connectivity state
 [![likes](https://img.shields.io/pub/likes/connectivity_listener)](https://pub.dev/packages/connectivity_listener)
 [![popularity](https://img.shields.io/pub/popularity/connectivity_listener)](https://pub.dev/packages/connectivity_listener)
 [![pub points](https://img.shields.io/pub/points/connectivity_listener)](https://pub.dev/packages/connectivity_listener)
+[![Vibe Coded ✨](https://img.shields.io/badge/Vibe_Coded-✨-purple)](https://github.com/Prince2347X/connectivity_listener)
+
+> ⚠️ **Use with Caution**: This library is AI-assisted. While it aims to provide reliable functionality, thorough testing in your specific use case is recommended.
 
 ## Features
 
-*   Provides streams to monitor changes in WiFi state (enabled, disabled, unknown).
-*   Provides streams to monitor changes in Bluetooth state (on, off, unknown).
-*   Android only implementation.
+*   Provides streams to monitor changes in WiFi states:
+    * `enabling` - WiFi is currently being enabled
+    * `enabled` - WiFi is fully enabled
+    * `disabling` - WiFi is currently being disabled
+    * `disabled` - WiFi is fully disabled
+    * `unknown` - WiFi state is unknown
+*   Provides streams to monitor changes in Bluetooth states:
+    * `turningOn` - Bluetooth is currently being turned on
+    * `on` - Bluetooth is fully turned on
+    * `turningOff` - Bluetooth is currently being turned off
+    * `off` - Bluetooth is fully turned off
+    * `unknown` - Bluetooth state is unknown
+*   Tracks and provides both current and previous states for each state change
+*   Android only implementation
 
 ## Getting Started
 
@@ -72,29 +86,29 @@ Create an instance of the plugin and listen to the streams:
 
 ```dart
 final _connectivityListener = ConnectivityListener();
-late StreamSubscription<WifiState> _wifiSubscription;
-late StreamSubscription<BluetoothState> _bluetoothSubscription;
+late StreamSubscription<StateChange<WifiState>> _wifiSubscription;
+late StreamSubscription<StateChange<BluetoothState>> _bluetoothSubscription;
 
-WifiState currentWifiState = WifiState.unknown;
-BluetoothState currentBluetoothState = BluetoothState.unknown;
+// Initialize state tracking
+StateChange<WifiState>? _wifiStateChange;
+StateChange<BluetoothState>? _bluetoothStateChange;
 
 void startListening() {
-  _wifiSubscription = _connectivityListener.onWifiStateChanged.listen((WifiState state) {
-    print("WiFi state changed: ${state.name}");
+  _wifiSubscription = _connectivityListener.onWifiStateChanged.listen((StateChange<WifiState> stateChange) {
+    print("WiFi state changed: ${stateChange.currentState.name} (previous: ${stateChange.previousState?.name ?? 'none'})");
     setState(() {
-      currentWifiState = state;
+      _wifiStateChange = stateChange;
     });
   }, onError: (error) {
     print("Error listening to WiFi state: $error");
   });
 
-  _bluetoothSubscription = _connectivityListener.onBluetoothStateChanged.listen((BluetoothState state) {
-    print("Bluetooth state changed: ${state.name}");
+  _bluetoothSubscription = _connectivityListener.onBluetoothStateChanged.listen((StateChange<BluetoothState> stateChange) {
+    print("Bluetooth state changed: ${stateChange.currentState.name} (previous: ${stateChange.previousState?.name ?? 'none'})");
     setState(() {
-      currentBluetoothState = state;
+      _bluetoothStateChange = stateChange;
     });
   }, onError: (error) {
-    print("Error listening to Bluetooth state: $error");
     // Handle potential permission errors
     if (error is PlatformException && error.code == 'PERMISSION_DENIED') {
        print('BLUETOOTH_CONNECT permission denied. Please request it.');
@@ -111,13 +125,89 @@ void dispose() {
 }
 ```
 
-See the `example` directory for a more complete implementation.
+### State Change Detection Examples
+
+You can track state transitions and handle different scenarios:
+
+```dart
+void onWifiStateChanged(StateChange<WifiState> stateChange) {
+  // Check if WiFi is turning on
+  if (stateChange.currentState == WifiState.enabling) {
+    showLoadingIndicator();
+  }
+  
+  // Check if WiFi has finished turning on
+  if (stateChange.previousState == WifiState.enabling && 
+      stateChange.currentState == WifiState.enabled) {
+    hideLoadingIndicator();
+    showSuccessMessage('WiFi Connected');
+  }
+
+  // Check for failed enable attempt
+  if (stateChange.previousState == WifiState.enabling && 
+      stateChange.currentState == WifiState.disabled) {
+    showErrorMessage('Failed to enable WiFi');
+  }
+}
+
+void onBluetoothStateChanged(StateChange<BluetoothState> stateChange) {
+  // Track Bluetooth turning on process
+  if (stateChange.currentState == BluetoothState.turningOn) {
+    showProgress('Turning on Bluetooth...');
+  }
+
+  // Detect successful enable
+  if (stateChange.previousState == BluetoothState.turningOn && 
+      stateChange.currentState == BluetoothState.on) {
+    showSuccess('Bluetooth is ready');
+  }
+
+  // Handle interrupted state changes
+  if (stateChange.previousState == BluetoothState.turningOn && 
+      stateChange.currentState == BluetoothState.off) {
+    showError('Failed to turn on Bluetooth');
+  }
+}
+```
+
+See the `example` directory for a complete implementation.
 
 ## API Reference
 
+### ConnectivityListener
+
 *   `ConnectivityListener()`: Creates an instance of the plugin.
-*   `Stream<WifiState> get onWifiStateChanged`: A broadcast stream that emits `WifiState` enum values (`enabled`, `disabled`, `unknown`) whenever the device's WiFi state changes.
-*   `Stream<BluetoothState> get onBluetoothStateChanged`: A broadcast stream that emits `BluetoothState` enum values (`on`, `off`, `unknown`) whenever the device's Bluetooth adapter state changes.
+
+### Streams
+
+*   `Stream<StateChange<WifiState>> get onWifiStateChanged`: A broadcast stream that emits `StateChange` objects containing both current and previous WiFi states.
+*   `Stream<StateChange<BluetoothState>> get onBluetoothStateChanged`: A broadcast stream that emits `StateChange` objects containing both current and previous Bluetooth states.
+
+### StateChange<T>
+
+A class that holds both the current and previous states during a state transition:
+
+*   `T? previousState`: The state before the change occurred. Null for the first event.
+*   `T currentState`: The current state after the change.
+*   `String toString()`: Returns a formatted string representation of the state change.
+
+### WifiState
+
+Enum representing all possible WiFi states:
+*   `enabling`: WiFi is in the process of being enabled
+*   `enabled`: WiFi is fully enabled and ready
+*   `disabling`: WiFi is in the process of being disabled
+*   `disabled`: WiFi is fully disabled
+*   `unknown`: WiFi state could not be determined
+
+### BluetoothState
+
+Enum representing all possible Bluetooth states:
+*   `turningOn`: Bluetooth adapter is in the process of turning on
+*   `on`: Bluetooth is fully on and ready
+*   `turningOff`: Bluetooth adapter is in the process of turning off
+*   `off`: Bluetooth is fully off
+*   `unknown`: Bluetooth state could not be determined
 
 ## Contributing
 
