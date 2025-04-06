@@ -1,12 +1,12 @@
-# connectivity_listener
+# network_settings_listener
 
 A Flutter plugin for Android to listen for WiFi and Bluetooth connectivity state changes.
 
-[![pub version](https://img.shields.io/pub/v/connectivity_listener.svg)](https://pub.dev/packages/connectivity_listener)
-[![likes](https://img.shields.io/pub/likes/connectivity_listener)](https://pub.dev/packages/connectivity_listener)
-[![popularity](https://img.shields.io/pub/popularity/connectivity_listener)](https://pub.dev/packages/connectivity_listener)
-[![pub points](https://img.shields.io/pub/points/connectivity_listener)](https://pub.dev/packages/connectivity_listener)
-[![Vibe Coded ✨](https://img.shields.io/badge/Vibe_Coded-✨-purple)](https://github.com/Prince2347X/connectivity_listener)
+[![pub version](https://img.shields.io/pub/v/network_settings_listener.svg)](https://pub.dev/packages/network_settings_listener)
+[![likes](https://img.shields.io/pub/likes/network_settings_listener)](https://pub.dev/packages/network_settings_listener)
+[![popularity](https://img.shields.io/pub/popularity/network_settings_listener)](https://pub.dev/packages/network_settings_listener)
+[![pub points](https://img.shields.io/pub/points/network_settings_listener)](https://pub.dev/packages/network_settings_listener)
+[![Vibe Coded ✨](https://img.shields.io/badge/Vibe_Coded-✨-purple)](https://github.com/Prince2347X/network_settings_listener)
 
 > ⚠️ **Use with Caution**: This library is AI-assisted. While it aims to provide reliable functionality, thorough testing in your specific use case is recommended.
 
@@ -42,7 +42,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  connectivity_listener: ^0.0.1 # Use the latest version
+  network_settings_listener: ^0.0.1 # Use the latest version
 ```
 
 Then run `flutter pub get`.
@@ -77,15 +77,15 @@ The `BLUETOOTH_CONNECT` permission is a runtime permission. Your application mus
 Import the package:
 
 ```dart
-import 'package:connectivity_listener/connectivity_listener.dart';
-import 'package:connectivity_listener/connectivity_listener_platform_interface.dart'; // For enums
+import 'package:network_settings_listener/network_settings_listener.dart';
+import 'package:network_settings_listener/network_settings_listener_platform_interface.dart';
 import 'dart:async';
 ```
 
 Create an instance of the plugin and listen to the streams:
 
 ```dart
-final _connectivityListener = ConnectivityListener();
+final _networkSettingsListener = NetworkSettingsListener();
 late StreamSubscription<StateChange<WifiState>> _wifiSubscription;
 late StreamSubscription<StateChange<BluetoothState>> _bluetoothSubscription;
 
@@ -94,25 +94,21 @@ StateChange<WifiState>? _wifiStateChange;
 StateChange<BluetoothState>? _bluetoothStateChange;
 
 void startListening() {
-  _wifiSubscription = _connectivityListener.onWifiStateChanged.listen((StateChange<WifiState> stateChange) {
+  _wifiSubscription = _networkSettingsListener.onWifiStateChanged.listen((StateChange<WifiState> stateChange) {
     print("WiFi state changed: ${stateChange.currentState.name} (previous: ${stateChange.previousState?.name ?? 'none'})");
     setState(() {
       _wifiStateChange = stateChange;
     });
-  }, onError: (error) {
-    print("Error listening to WiFi state: $error");
   });
-
-  _bluetoothSubscription = _connectivityListener.onBluetoothStateChanged.listen((StateChange<BluetoothState> stateChange) {
+  
+  _bluetoothSubscription = _networkSettingsListener.onBluetoothStateChanged.listen((StateChange<BluetoothState> stateChange) {
     print("Bluetooth state changed: ${stateChange.currentState.name} (previous: ${stateChange.previousState?.name ?? 'none'})");
     setState(() {
       _bluetoothStateChange = stateChange;
     });
   }, onError: (error) {
-    // Handle potential permission errors
     if (error is PlatformException && error.code == 'PERMISSION_DENIED') {
-       print('BLUETOOTH_CONNECT permission denied. Please request it.');
-       // Implement runtime permission request logic here
+      print('BLUETOOTH_CONNECT permission denied. Please request it.');
     }
   });
 }
@@ -215,5 +211,5 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Prince2347X/network_settings_listener/blob/main/LICENSE) file for details.
 

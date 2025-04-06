@@ -1,6 +1,6 @@
 ## 1.0.0
 
-* Initial release of the connectivity_listener plugin
+* Initial release of the network_settings_listener plugin
 * Added complete WiFi state tracking with transitions (enabling, enabled, disabling, disabled, unknown)
 * Added complete Bluetooth state tracking with transitions (turningOn, on, turningOff, off, unknown)
 * Implemented state change tracking to provide both current and previous states
