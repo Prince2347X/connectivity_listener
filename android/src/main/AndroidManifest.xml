@@ -1,0 +1,16 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="dev.Prince2347X.connectivity_listener">
+
+    <!-- Required for checking WiFi state -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- Required for checking Bluetooth state -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <!-- Required for checking Bluetooth state on Android 12+ -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- Optional: If you need to scan for Bluetooth devices (not strictly needed for state listening but often related) -->
+    <!-- <uses-permission android:name="android.permission.BLUETOOTH_SCAN" /> -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> -->
+
+</manifest>
