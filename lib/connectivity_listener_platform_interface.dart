@@ -4,11 +4,47 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'connectivity_listener_method_channel.dart';
 
-/// Enum representing the possible states of WiFi connectivity.
-enum WifiState { enabled, disabled, unknown }
+/// Represents all possible WiFi states as defined in Android's WifiManager
+enum WifiState {
+  /// WiFi is currently being enabled
+  enabling,
+  /// WiFi is fully enabled
+  enabled,
+  /// WiFi is currently being disabled
+  disabling,
+  /// WiFi is fully disabled
+  disabled,
+  /// WiFi state is unknown
+  unknown
+}
 
-/// Enum representing the possible states of Bluetooth connectivity.
-enum BluetoothState { on, off, unknown }
+/// Represents all possible Bluetooth states as defined in Android's BluetoothAdapter
+enum BluetoothState {
+  /// Bluetooth is currently being turned on
+  turningOn,
+  /// Bluetooth is fully turned on
+  on,
+  /// Bluetooth is currently being turned off
+  turningOff,
+  /// Bluetooth is fully turned off
+  off,
+  /// Bluetooth state is unknown
+  unknown
+}
+
+/// Class to hold state change information including previous and current states
+class StateChange<T extends Enum> {
+  /// The previous state before the change
+  final T? previousState;
+  /// The current state after the change
+  final T currentState;
+
+  /// Creates a new StateChange instance
+  const StateChange(this.previousState, this.currentState);
+
+  @override
+  String toString() => 'StateChange(previous: ${previousState?.name}, current: ${currentState.name})';
+}
 
 abstract class ConnectivityListenerPlatform extends PlatformInterface {
   /// Constructs a ConnectivityListenerPlatform.
@@ -16,8 +52,7 @@ abstract class ConnectivityListenerPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static ConnectivityListenerPlatform _instance =
-      MethodChannelConnectivityListener();
+  static ConnectivityListenerPlatform _instance = MethodChannelConnectivityListener();
 
   /// The default instance of [ConnectivityListenerPlatform] to use.
   ///
@@ -32,14 +67,13 @@ abstract class ConnectivityListenerPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  /// Stream that emits [WifiState] changes.
-  Stream<WifiState> get onWifiStateChanged {
+  /// Stream that emits [StateChange<WifiState>] when WiFi state changes.
+  Stream<StateChange<WifiState>> get onWifiStateChanged {
     throw UnimplementedError('onWifiStateChanged has not been implemented.');
   }
 
-  /// Stream that emits [BluetoothState] changes.
-  Stream<BluetoothState> get onBluetoothStateChanged {
-    throw UnimplementedError(
-        'onBluetoothStateChanged has not been implemented.');
+  /// Stream that emits [StateChange<BluetoothState>] when Bluetooth state changes.
+  Stream<StateChange<BluetoothState>> get onBluetoothStateChanged {
+    throw UnimplementedError('onBluetoothStateChanged has not been implemented.');
   }
 }

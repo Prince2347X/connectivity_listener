@@ -9,60 +9,86 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockConnectivityListenerPlatform
     with MockPlatformInterfaceMixin
     implements ConnectivityListenerPlatform {
-  // Mock the stream getters
-  @override
-  Stream<WifiState> get onWifiStateChanged =>
-      Stream.value(WifiState.enabled); // Example stream
+  // Remove unused state tracking fields
+  // We don't need them since we're using Stream.fromIterable
 
   @override
-  Stream<BluetoothState> get onBluetoothStateChanged =>
-      Stream.value(BluetoothState.on); // Example stream
+  Stream<StateChange<WifiState>> get onWifiStateChanged {
+    return Stream.fromIterable([
+      StateChange(null, WifiState.disabled),
+      StateChange(WifiState.disabled, WifiState.enabling),
+      StateChange(WifiState.enabling, WifiState.enabled),
+    ]);
+  }
 
-  // Remove getPlatformVersion mock
-  // @override
-  // Future<String?> getPlatformVersion() => Future.value('42');
+  @override
+  Stream<StateChange<BluetoothState>> get onBluetoothStateChanged {
+    return Stream.fromIterable([
+      StateChange(null, BluetoothState.off),
+      StateChange(BluetoothState.off, BluetoothState.turningOn),
+      StateChange(BluetoothState.turningOn, BluetoothState.on),
+    ]);
+  }
 }
 
 void main() {
-  final ConnectivityListenerPlatform initialPlatform =
-      ConnectivityListenerPlatform.instance;
+  final ConnectivityListenerPlatform initialPlatform = ConnectivityListenerPlatform.instance;
 
   test('$MethodChannelConnectivityListener is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelConnectivityListener>());
   });
 
-  // Remove the old getPlatformVersion test
-  // test('getPlatformVersion', () async {
-  //   ConnectivityListener connectivityListenerPlugin = ConnectivityListener();
-  //   MockConnectivityListenerPlatform fakePlatform = MockConnectivityListenerPlatform();
-  //   ConnectivityListenerPlatform.instance = fakePlatform;
-  //
-  //   expect(await connectivityListenerPlugin.getPlatformVersion(), '42');
-  // });
-
-  test('onWifiStateChanged returns stream from platform', () {
-    ConnectivityListener connectivityListenerPlugin = ConnectivityListener();
-    MockConnectivityListenerPlatform fakePlatform =
-        MockConnectivityListenerPlatform();
+  test('onWifiStateChanged emits state changes in correct order', () async {
+    final plugin = ConnectivityListener();
+    final fakePlatform = MockConnectivityListenerPlatform();
     ConnectivityListenerPlatform.instance = fakePlatform;
 
-    expect(connectivityListenerPlugin.onWifiStateChanged,
-        isA<Stream<WifiState>>());
-    // Optionally, test if it emits the expected mock value
-    expectLater(connectivityListenerPlugin.onWifiStateChanged,
-        emits(WifiState.enabled));
+    expect(
+      plugin.onWifiStateChanged,
+      emitsInOrder([
+        // Initial state
+        predicate((StateChange<WifiState> state) =>
+            state.previousState == null && state.currentState == WifiState.disabled),
+        // Enabling transition
+        predicate((StateChange<WifiState> state) =>
+            state.previousState == WifiState.disabled &&
+            state.currentState == WifiState.enabling),
+        // Fully enabled
+        predicate((StateChange<WifiState> state) =>
+            state.previousState == WifiState.enabling &&
+            state.currentState == WifiState.enabled),
+      ]),
+    );
   });
 
-  test('onBluetoothStateChanged returns stream from platform', () {
-    ConnectivityListener connectivityListenerPlugin = ConnectivityListener();
-    MockConnectivityListenerPlatform fakePlatform =
-        MockConnectivityListenerPlatform();
+  test('onBluetoothStateChanged emits state changes in correct order', () async {
+    final plugin = ConnectivityListener();
+    final fakePlatform = MockConnectivityListenerPlatform();
     ConnectivityListenerPlatform.instance = fakePlatform;
 
-    expect(connectivityListenerPlugin.onBluetoothStateChanged,
-        isA<Stream<BluetoothState>>());
-    // Optionally, test if it emits the expected mock value
-    expectLater(connectivityListenerPlugin.onBluetoothStateChanged,
-        emits(BluetoothState.on));
+    expect(
+      plugin.onBluetoothStateChanged,
+      emitsInOrder([
+        // Initial state
+        predicate((StateChange<BluetoothState> state) =>
+            state.previousState == null && state.currentState == BluetoothState.off),
+        // Turning on transition
+        predicate((StateChange<BluetoothState> state) =>
+            state.previousState == BluetoothState.off &&
+            state.currentState == BluetoothState.turningOn),
+        // Fully on
+        predicate((StateChange<BluetoothState> state) =>
+            state.previousState == BluetoothState.turningOn &&
+            state.currentState == BluetoothState.on),
+      ]),
+    );
+  });
+
+  test('StateChange toString returns formatted string', () {
+    final stateChange = StateChange(WifiState.disabled, WifiState.enabled);
+    expect(
+      stateChange.toString(),
+      'StateChange(previous: disabled, current: enabled)',
+    );
   });
 }

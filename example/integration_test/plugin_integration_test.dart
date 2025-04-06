@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
@@ -8,29 +7,39 @@ import 'package:connectivity_listener/connectivity_listener_platform_interface.d
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Streams are accessible', (WidgetTester tester) async {
+  testWidgets('State change streams are accessible and include previous states', (WidgetTester tester) async {
     final ConnectivityListener plugin = ConnectivityListener();
+    
+    // For tracking state changes
+    StateChange<WifiState>? lastWifiStateChange;
+    StateChange<BluetoothState>? lastBluetoothStateChange;
+    
+    // Listen to both streams
+    final wifiSubscription = plugin.onWifiStateChanged.listen((change) {
+      lastWifiStateChange = change;
+    });
 
-    // Verify that accessing the streams doesn't throw an immediate error.
-    // We'll listen for a short duration.
-    StreamSubscription<WifiState>? wifiSubscription;
-    StreamSubscription<BluetoothState>? bluetoothSubscription;
+    final bluetoothSubscription = plugin.onBluetoothStateChanged.listen((change) {
+      lastBluetoothStateChange = change;
+    });
 
-    expect(() {
-      wifiSubscription = plugin.onWifiStateChanged.listen((_) {});
-    }, returnsNormally);
+    // Wait for initial states (might take a moment on real device)
+    await Future<void>.delayed(const Duration(seconds: 1));
 
-    expect(() {
-      bluetoothSubscription = plugin.onBluetoothStateChanged.listen((_) {});
-    }, returnsNormally);
+    // Verify that we received state changes with proper structure
+    expect(lastWifiStateChange, isNotNull);
+    expect(lastWifiStateChange?.currentState, isA<WifiState>());
+    // Initial state should have null previous state
+    expect(lastWifiStateChange?.previousState, isNull);
 
-    // Allow some time for any initial events or errors (like permission errors)
-    await Future<void>.delayed(const Duration(milliseconds: 500));
+    if (lastBluetoothStateChange != null) { // Might be null if permission denied
+      expect(lastBluetoothStateChange?.currentState, isA<BluetoothState>());
+      // Initial state should have null previous state
+      expect(lastBluetoothStateChange?.previousState, isNull);
+    }
 
-    // Clean up subscriptions
-    await wifiSubscription?.cancel();
-    await bluetoothSubscription?.cancel();
-
-    // The test passes if no exceptions were thrown during stream access and initial listen.
+    // Clean up
+    await wifiSubscription.cancel();
+    await bluetoothSubscription.cancel();
   });
 }
