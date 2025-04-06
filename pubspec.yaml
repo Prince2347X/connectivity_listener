@@ -1,7 +1,7 @@
 name: connectivity_listener
 description: "A Flutter plugin for Android to listen for WiFi and Bluetooth connectivity state changes."
 version: 1.0.0
-homepage: # Optional: Add a link to your repository or website here
+homepage: https://github.com/Prince2347X/connectivity_listener
 
 environment:
   sdk: ^3.6.1
