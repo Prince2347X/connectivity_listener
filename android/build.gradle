@@ -25,7 +25,7 @@ apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
 android {
-    namespace = "dev.Prince2347X.connectivity_listener"
+    namespace = "dev.Prince2347X.network_settings_listener"
 
     compileSdk = 35
 

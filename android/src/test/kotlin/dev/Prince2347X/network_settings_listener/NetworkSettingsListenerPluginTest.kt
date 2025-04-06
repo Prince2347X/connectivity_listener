@@ -1,4 +1,4 @@
-package dev.Prince2347X.connectivity_listener
+package dev.Prince2347X.network_settings_listener
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -13,7 +13,7 @@ import org.mockito.Mockito
  * you can run them directly from IDEs that support JUnit such as Android Studio.
  */
 
-internal class ConnectivityListenerPluginTest {
+internal class NetworkSettingsListenerPluginTest {
   @Test
   fun onMethodCall_getPlatformVersion_returnsExpectedValue() {
     val plugin = ConnectivityListenerPlugin()

@@ -5,7 +5,7 @@ import 'package:network_settings_listener_example/main.dart';
 void main() {
   testWidgets('Smoke test - app can start', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
-    expect(find.text('Connectivity Listener Example'), findsOneWidget);
+    expect(find.text('Network Settings Listener Example'), findsOneWidget);
     expect(find.byType(Card), findsNWidgets(3)); // Two state cards and one instruction card
   });
 }

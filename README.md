@@ -170,9 +170,9 @@ See the `example` directory for a complete implementation.
 
 ## API Reference
 
-### ConnectivityListener
+### NetworkSettingsListener
 
-*   `ConnectivityListener()`: Creates an instance of the plugin.
+*   `NetworkSettingsListener()`: Creates an instance of the plugin.
 
 ### Streams
 

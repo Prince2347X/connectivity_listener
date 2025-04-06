@@ -174,7 +174,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Connectivity Listener Example'),
+          title: const Text('Network Settings Listener Example'),
         ),
         body: SingleChildScrollView(
           child: Padding(
