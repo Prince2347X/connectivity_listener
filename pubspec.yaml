@@ -1,6 +1,6 @@
 name: network_settings_listener
 description: "A Flutter plugin for Android to listen for WiFi and Bluetooth connectivity state changes."
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/Prince2347X/network_settings_listener
 
 environment:
