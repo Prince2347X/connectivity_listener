@@ -7,19 +7,21 @@ import 'package:network_settings_listener/network_settings_listener_platform_int
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('State change streams are accessible and include previous states', (WidgetTester tester) async {
+  testWidgets('State change streams are accessible and include previous states',
+      (WidgetTester tester) async {
     final NetworkSettingsListener plugin = NetworkSettingsListener();
-    
+
     // For tracking state changes
     StateChange<WifiState>? lastWifiStateChange;
     StateChange<BluetoothState>? lastBluetoothStateChange;
-    
+
     // Listen to both streams
     final wifiSubscription = plugin.onWifiStateChanged.listen((change) {
       lastWifiStateChange = change;
     });
 
-    final bluetoothSubscription = plugin.onBluetoothStateChanged.listen((change) {
+    final bluetoothSubscription =
+        plugin.onBluetoothStateChanged.listen((change) {
       lastBluetoothStateChange = change;
     });
 
@@ -32,7 +34,8 @@ void main() {
     // Initial state should have null previous state
     expect(lastWifiStateChange?.previousState, isNull);
 
-    if (lastBluetoothStateChange != null) { // Might be null if permission denied
+    if (lastBluetoothStateChange != null) {
+      // Might be null if permission denied
       expect(lastBluetoothStateChange?.currentState, isA<BluetoothState>());
       // Initial state should have null previous state
       expect(lastBluetoothStateChange?.previousState, isNull);

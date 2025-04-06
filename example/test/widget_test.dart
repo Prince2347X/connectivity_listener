@@ -6,6 +6,7 @@ void main() {
   testWidgets('Smoke test - app can start', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
     expect(find.text('Network Settings Listener Example'), findsOneWidget);
-    expect(find.byType(Card), findsNWidgets(3)); // Two state cards and one instruction card
+    expect(find.byType(Card),
+        findsNWidgets(3)); // Two state cards and one instruction card
   });
 }

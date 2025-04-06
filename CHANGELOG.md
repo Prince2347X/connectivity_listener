@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Minor documentation improvements
+
 ## 1.0.0
 
 * Initial release of the network_settings_listener plugin

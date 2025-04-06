@@ -6,47 +6,45 @@ import 'package:flutter/services.dart';
 import 'network_settings_listener_platform_interface.dart';
 
 /// An implementation of [NetworkSettingsListenerPlatform] that uses method channels.
-class MethodChannelNetworkSettingsListener extends NetworkSettingsListenerPlatform {
+class MethodChannelNetworkSettingsListener
+    extends NetworkSettingsListenerPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
   final methodChannel = const MethodChannel('network_settings_listener/method');
 
   /// Event channel for WiFi state changes.
   @visibleForTesting
-  final wifiEventChannel = const EventChannel('network_settings_listener/wifi_state');
+  final wifiEventChannel =
+      const EventChannel('network_settings_listener/wifi_state');
 
   /// Event channel for Bluetooth state changes.
   @visibleForTesting
-  final bluetoothEventChannel = const EventChannel('network_settings_listener/bluetooth_state');
+  final bluetoothEventChannel =
+      const EventChannel('network_settings_listener/bluetooth_state');
 
   Stream<StateChange<WifiState>>? _onWifiStateChanged;
   Stream<StateChange<BluetoothState>>? _onBluetoothStateChanged;
 
   @override
   Stream<StateChange<WifiState>> get onWifiStateChanged {
-    _onWifiStateChanged ??= wifiEventChannel
-        .receiveBroadcastStream()
-        .map((dynamic event) {
-          final Map<dynamic, dynamic> stateMap = event as Map<dynamic, dynamic>;
-          return StateChange(
-            _parseWifiState(stateMap['previousState'] as int?),
-            _parseWifiState(stateMap['currentState'] as int?)
-          );
-        });
+    _onWifiStateChanged ??=
+        wifiEventChannel.receiveBroadcastStream().map((dynamic event) {
+      final Map<dynamic, dynamic> stateMap = event as Map<dynamic, dynamic>;
+      return StateChange(_parseWifiState(stateMap['previousState'] as int?),
+          _parseWifiState(stateMap['currentState'] as int?));
+    });
     return _onWifiStateChanged!;
   }
 
   @override
   Stream<StateChange<BluetoothState>> get onBluetoothStateChanged {
-    _onBluetoothStateChanged ??= bluetoothEventChannel
-        .receiveBroadcastStream()
-        .map((dynamic event) {
-          final Map<dynamic, dynamic> stateMap = event as Map<dynamic, dynamic>;
-          return StateChange(
-            _parseBluetoothState(stateMap['previousState'] as int?),
-            _parseBluetoothState(stateMap['currentState'] as int?)
-          );
-        });
+    _onBluetoothStateChanged ??=
+        bluetoothEventChannel.receiveBroadcastStream().map((dynamic event) {
+      final Map<dynamic, dynamic> stateMap = event as Map<dynamic, dynamic>;
+      return StateChange(
+          _parseBluetoothState(stateMap['previousState'] as int?),
+          _parseBluetoothState(stateMap['currentState'] as int?));
+    });
     return _onBluetoothStateChanged!;
   }
 

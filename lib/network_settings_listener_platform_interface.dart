@@ -8,12 +8,16 @@ import 'network_settings_listener_method_channel.dart';
 enum WifiState {
   /// WiFi is currently being enabled
   enabling,
+
   /// WiFi is fully enabled
   enabled,
+
   /// WiFi is currently being disabled
   disabling,
+
   /// WiFi is fully disabled
   disabled,
+
   /// WiFi state is unknown
   unknown
 }
@@ -22,12 +26,16 @@ enum WifiState {
 enum BluetoothState {
   /// Bluetooth is currently being turned on
   turningOn,
+
   /// Bluetooth is fully turned on
   on,
+
   /// Bluetooth is currently being turned off
   turningOff,
+
   /// Bluetooth is fully turned off
   off,
+
   /// Bluetooth state is unknown
   unknown
 }
@@ -36,6 +44,7 @@ enum BluetoothState {
 class StateChange<T extends Enum> {
   /// The previous state before the change
   final T? previousState;
+
   /// The current state after the change
   final T currentState;
 
@@ -43,7 +52,8 @@ class StateChange<T extends Enum> {
   const StateChange(this.previousState, this.currentState);
 
   @override
-  String toString() => 'StateChange(previous: ${previousState?.name}, current: ${currentState.name})';
+  String toString() =>
+      'StateChange(previous: ${previousState?.name}, current: ${currentState.name})';
 }
 
 abstract class NetworkSettingsListenerPlatform extends PlatformInterface {
@@ -52,7 +62,8 @@ abstract class NetworkSettingsListenerPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static NetworkSettingsListenerPlatform _instance = MethodChannelNetworkSettingsListener();
+  static NetworkSettingsListenerPlatform _instance =
+      MethodChannelNetworkSettingsListener();
 
   /// The default instance of [NetworkSettingsListenerPlatform] to use.
   ///
@@ -74,6 +85,7 @@ abstract class NetworkSettingsListenerPlatform extends PlatformInterface {
 
   /// Stream that emits [StateChange<BluetoothState>] when Bluetooth state changes.
   Stream<StateChange<BluetoothState>> get onBluetoothStateChanged {
-    throw UnimplementedError('onBluetoothStateChanged has not been implemented.');
+    throw UnimplementedError(
+        'onBluetoothStateChanged has not been implemented.');
   }
 }

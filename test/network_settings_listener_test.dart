@@ -29,10 +29,12 @@ class MockNetworkSettingsListenerPlatform
 }
 
 void main() {
-  final NetworkSettingsListenerPlatform initialPlatform = NetworkSettingsListenerPlatform.instance;
+  final NetworkSettingsListenerPlatform initialPlatform =
+      NetworkSettingsListenerPlatform.instance;
 
   test('$MethodChannelNetworkSettingsListener is the default instance', () {
-    expect(initialPlatform, isInstanceOf<MethodChannelNetworkSettingsListener>());
+    expect(
+        initialPlatform, isInstanceOf<MethodChannelNetworkSettingsListener>());
   });
 
   test('onWifiStateChanged emits state changes in correct order', () async {
@@ -45,7 +47,8 @@ void main() {
       emitsInOrder([
         // Initial state
         predicate((StateChange<WifiState> state) =>
-            state.previousState == null && state.currentState == WifiState.disabled),
+            state.previousState == null &&
+            state.currentState == WifiState.disabled),
         // Enabling transition
         predicate((StateChange<WifiState> state) =>
             state.previousState == WifiState.disabled &&
@@ -58,7 +61,8 @@ void main() {
     );
   });
 
-  test('onBluetoothStateChanged emits state changes in correct order', () async {
+  test('onBluetoothStateChanged emits state changes in correct order',
+      () async {
     final plugin = NetworkSettingsListener();
     final fakePlatform = MockNetworkSettingsListenerPlatform();
     NetworkSettingsListenerPlatform.instance = fakePlatform;
@@ -68,7 +72,8 @@ void main() {
       emitsInOrder([
         // Initial state
         predicate((StateChange<BluetoothState> state) =>
-            state.previousState == null && state.currentState == BluetoothState.off),
+            state.previousState == null &&
+            state.currentState == BluetoothState.off),
         // Turning on transition
         predicate((StateChange<BluetoothState> state) =>
             state.previousState == BluetoothState.off &&

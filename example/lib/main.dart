@@ -61,19 +61,22 @@ class _MyAppState extends State<MyApp> {
     );
 
     // Listen to Bluetooth state changes
-    _bluetoothSubscription = _networkSettingsListener.onBluetoothStateChanged.listen(
+    _bluetoothSubscription =
+        _networkSettingsListener.onBluetoothStateChanged.listen(
       (StateChange<BluetoothState> stateChange) {
         if (!mounted) return;
         setState(() {
           _bluetoothStateChange = stateChange;
-          _bluetoothTransitionMessage = _getBluetoothTransitionMessage(stateChange);
+          _bluetoothTransitionMessage =
+              _getBluetoothTransitionMessage(stateChange);
         });
       },
       onError: (dynamic error) {
         if (!mounted) return;
         setState(() {
           if (error is PlatformException && error.code == 'PERMISSION_DENIED') {
-            _showSnackBar('Bluetooth permission denied. Please grant permission.');
+            _showSnackBar(
+                'Bluetooth permission denied. Please grant permission.');
           }
           _bluetoothStateChange = null;
           _bluetoothTransitionMessage = 'Error: $error';
@@ -90,15 +93,15 @@ class _MyAppState extends State<MyApp> {
     }
 
     // Handle specific transitions
-    if (stateChange.previousState == WifiState.enabling && 
+    if (stateChange.previousState == WifiState.enabling &&
         stateChange.currentState == WifiState.enabled) {
       return 'WiFi successfully enabled';
     }
-    if (stateChange.previousState == WifiState.enabling && 
+    if (stateChange.previousState == WifiState.enabling &&
         stateChange.currentState == WifiState.disabled) {
       return 'Failed to enable WiFi';
     }
-    if (stateChange.previousState == WifiState.disabling && 
+    if (stateChange.previousState == WifiState.disabling &&
         stateChange.currentState == WifiState.disabled) {
       return 'WiFi successfully disabled';
     }
@@ -107,21 +110,22 @@ class _MyAppState extends State<MyApp> {
     return 'Transitioning from ${stateChange.previousState?.name ?? 'unknown'} to ${stateChange.currentState.name}';
   }
 
-  String _getBluetoothTransitionMessage(StateChange<BluetoothState> stateChange) {
+  String _getBluetoothTransitionMessage(
+      StateChange<BluetoothState> stateChange) {
     if (stateChange.previousState == null) {
       return 'Initial state: ${stateChange.currentState.name}';
     }
 
     // Handle specific transitions
-    if (stateChange.previousState == BluetoothState.turningOn && 
+    if (stateChange.previousState == BluetoothState.turningOn &&
         stateChange.currentState == BluetoothState.on) {
       return 'Bluetooth successfully turned on';
     }
-    if (stateChange.previousState == BluetoothState.turningOn && 
+    if (stateChange.previousState == BluetoothState.turningOn &&
         stateChange.currentState == BluetoothState.off) {
       return 'Failed to turn on Bluetooth';
     }
-    if (stateChange.previousState == BluetoothState.turningOff && 
+    if (stateChange.previousState == BluetoothState.turningOff &&
         stateChange.currentState == BluetoothState.off) {
       return 'Bluetooth successfully turned off';
     }
@@ -139,7 +143,8 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Widget _buildStateCard(String title, StateChange? stateChange, String? transitionMessage) {
+  Widget _buildStateCard(
+      String title, StateChange? stateChange, String? transitionMessage) {
     return Card(
       margin: const EdgeInsets.all(8.0),
       child: Padding(
@@ -158,8 +163,8 @@ class _MyAppState extends State<MyApp> {
                 const SizedBox(height: 8),
                 Text(transitionMessage,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.blue,
-                    )),
+                          color: Colors.blue,
+                        )),
               ],
             ] else
               const Text('Unknown'),
@@ -182,21 +187,25 @@ class _MyAppState extends State<MyApp> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildStateCard('WiFi State', _wifiStateChange, _wifiTransitionMessage),
-                _buildStateCard('Bluetooth State', _bluetoothStateChange, _bluetoothTransitionMessage),
+                _buildStateCard(
+                    'WiFi State', _wifiStateChange, _wifiTransitionMessage),
+                _buildStateCard('Bluetooth State', _bluetoothStateChange,
+                    _bluetoothTransitionMessage),
                 const SizedBox(height: 20),
                 const Card(
                   child: Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        Text('Instructions:', style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text('Instructions:',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
                         SizedBox(height: 8),
                         Text('1. Toggle WiFi/Bluetooth in system settings'),
                         Text('2. Watch the state transitions in real-time'),
                         Text('3. Notice how previous states are tracked'),
                         SizedBox(height: 8),
-                        Text('Note: Bluetooth requires permissions on Android 12+',
+                        Text(
+                            'Note: Bluetooth requires permissions on Android 12+',
                             style: TextStyle(fontStyle: FontStyle.italic)),
                       ],
                     ),
