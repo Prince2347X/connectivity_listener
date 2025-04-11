@@ -2,9 +2,9 @@
 
 A Flutter plugin for Android to listen for WiFi and Bluetooth connectivity state changes.
 
-[![pub version](https://img.shields.io/pub/v/network_settings_listener.svg)](https://pub.dev/packages/network_settings_listener)
+[![pub version](https://img.shields.io/pub/v/network_settings_listener)](https://pub.dev/packages/network_settings_listener)
 [![likes](https://img.shields.io/pub/likes/network_settings_listener)](https://pub.dev/packages/network_settings_listener)
-[![popularity](https://img.shields.io/pub/popularity/network_settings_listener)](https://pub.dev/packages/network_settings_listener)
+[![Pub Monthly Downloads](https://img.shields.io/pub/dm/network_settings_listener)](https://pub.dev/packages/network_settings_listener)
 [![pub points](https://img.shields.io/pub/points/network_settings_listener)](https://pub.dev/packages/network_settings_listener)
 [![Vibe Coded ✨](https://img.shields.io/badge/Vibe_Coded-✨-purple)](https://github.com/Prince2347X/network_settings_listener)
 
@@ -42,7 +42,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  network_settings_listener: ^0.0.1 # Use the latest version
+  network_settings_listener: ^1.0.2 # Use the latest version
 ```
 
 Then run `flutter pub get`.
